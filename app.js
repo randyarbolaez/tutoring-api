@@ -111,6 +111,8 @@ app.use(passport.session());
 //Route
 const authRoutes = require("./routes/auth-routes");
 app.use("/", authRoutes);
+const postRoutes = require("./routes/post-routes");
+app.use("/post", postRoutes);
 //Route
 
 app.listen(process.env.PORT || 8080, () => {

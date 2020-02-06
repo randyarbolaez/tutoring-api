@@ -30,13 +30,13 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.post("/authenticate", (req, res, next) => {
-  function generateJwt() {
-    return jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
-      expiresIn: "10m"
-    });
-  }
-
   passport.authenticate("local", (err, user, info) => {
+    const generateJwt = () => {
+      return jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "10m"
+      });
+    };
+
     if (err) {
       //err passport middleware
       return res.status(400).json(err);
@@ -48,11 +48,6 @@ router.post("/authenticate", (req, res, next) => {
       return res.status(404).json(info);
     }
   })(req, res);
-});
-
-router.post("/logout", (req, res, next) => {
-  req.logout();
-  res.send(doc);
 });
 
 module.exports = router;
