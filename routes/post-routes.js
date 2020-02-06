@@ -13,7 +13,6 @@ const verifyJwtToken = (req, res, next) => {
     return res.status(403).send({ auth: false, message: "No token provided" });
   } else {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      console.log(decoded, "process.env.JWT_SECRET");
       if (err) {
         return res
           .status(500)
@@ -36,6 +35,32 @@ router.post("/create", verifyJwtToken, (req, res, next) => {
       res.send(doc);
     } else {
       res.send(err);
+    }
+  });
+});
+
+router.get("/posts", (req, res, next) => {
+  Post.find()
+    .then(allPosts => {
+      res.send({ allPosts });
+    })
+    .catch(err => {
+      res.send({ err });
+    });
+});
+
+router.delete("/delete/:id", verifyJwtToken, (req, res, next) => {
+  Post.findById(req.params.id).then(job => {
+    if (req._id == job.user) {
+      Post.findByIdAndRemove(job.id)
+        .then(removedJob => {
+          res.send({ message: "Post was deleted", removedJob });
+        })
+        .catch(err => {
+          res.send({ err });
+        });
+    } else {
+      res.send({ message: "Only user can delete post" });
     }
   });
 });
