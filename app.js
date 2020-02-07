@@ -13,6 +13,7 @@ const bcrypt = require("bcrypt");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const cors = require("cors");
 
 const User = require("./models/user-schema");
 
@@ -55,7 +56,9 @@ app.use(
   })
 );
 
-app.set("views", path.join(__dirname, "views"));
+app.use(cors());
+
+// app.set("views", path.join(__dirname, "views"));
 // app.use(express.static(path.join(__dirname, "/public")));
 // app.use(favicon(path.join(__dirname, "public", "images", "favicon.ico")));
 
