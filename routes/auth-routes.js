@@ -42,7 +42,7 @@ router.post("/authenticate", (req, res, next) => {
       return res.status(400).json(err);
     } else if (user) {
       //registered user
-      return res.status(200).json({ token: generateJwt() });
+      return res.status(200).json({ user, token: generateJwt() });
     } else {
       // unknown user/wrong password
       return res.status(404).json(info);
