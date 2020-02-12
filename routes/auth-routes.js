@@ -20,7 +20,7 @@ router.post("/signup", (req, res, next) => {
       passport.authenticate("local", (err, user, info) => {
         const generateJwt = () => {
           return jwt.sign({ _id: doc._id }, process.env.JWT_SECRET, {
-            expiresIn: "10m"
+            expiresIn: "10d"
           });
         };
 
@@ -50,7 +50,7 @@ router.post("/authenticate", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     const generateJwt = () => {
       return jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "10m"
+        expiresIn: "10d"
       });
     };
 
