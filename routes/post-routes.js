@@ -50,11 +50,11 @@ router.get("/posts", (req, res, next) => {
 });
 
 router.delete("/delete/:id", verifyJwtToken, (req, res, next) => {
-  Post.findById(req.params.id).then(job => {
-    if (req._id == job.user) {
-      Post.findByIdAndRemove(job.id)
-        .then(removedJob => {
-          res.send({ message: "Post was deleted", removedJob });
+  Post.findById(req.params.id).then(post => {
+    if (req._id == post.user) {
+      Post.findByIdAndRemove(post.id)
+        .then(removedPost => {
+          res.send({ message: "Post was deleted", removedPost });
         })
         .catch(err => {
           res.send({ err });
