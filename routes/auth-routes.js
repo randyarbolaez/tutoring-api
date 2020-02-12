@@ -17,14 +17,31 @@ router.post("/signup", (req, res, next) => {
     password: bcrypt.hashSync(req.body.password, salt)
   }).save((err, doc) => {
     if (!err) {
-      console.log(doc, "doccc");
-      res.send(doc);
+      passport.authenticate("local", (err, user, info) => {
+        const generateJwt = () => {
+          return jwt.sign({ _id: doc._id }, process.env.JWT_SECRET, {
+            expiresIn: "10m"
+          });
+        };
+
+        if (err) {
+          //err passport middleware
+          return res.status(400).json(err);
+        } else if (user) {
+          //registered user
+          return res.status(200).json({ doc, token: generateJwt() });
+        } else {
+          // unknown user/wrong password
+          return res.status(404).json(info);
+        }
+      })(req, res);
     } else {
       if (err.code == 11000) {
         res
           .status(422)
           .send(["Username was already found, use a different username!"]);
       }
+      console.log(err);
     }
   });
 });
