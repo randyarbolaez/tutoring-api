@@ -29,7 +29,7 @@ router.post("/create", verifyJwtToken, (req, res, next) => {
   new Post({
     title: req.body.title,
     description: req.body.description,
-    user: req._id
+    user: req._id,
   }).save((err, doc) => {
     if (!err) {
       res.send(doc);
@@ -41,28 +41,38 @@ router.post("/create", verifyJwtToken, (req, res, next) => {
 
 router.get("/posts", (req, res, next) => {
   Post.find()
-    .then(allPosts => {
+    .then((allPosts) => {
       res.send({ allPosts });
     })
-    .catch(err => {
+    .catch((err) => {
       res.send({ err });
     });
 });
 
 router.delete("/delete/:id", verifyJwtToken, (req, res, next) => {
-  Post.findById(req.params.id).then(post => {
+  Post.findById(req.params.id).then((post) => {
     if (req._id == post.user) {
       Post.findByIdAndRemove(post.id)
-        .then(removedPost => {
+        .then((removedPost) => {
           res.send({ message: "Post was deleted", removedPost });
         })
-        .catch(err => {
+        .catch((err) => {
           res.send({ err });
         });
     } else {
       res.send({ message: "Only user can delete post" });
     }
   });
+});
+
+router.put("/update/:id", verifyJwtToken, (req, res, next) => {
+  Post.findByIdAndUpdate(req.params.id, req.body)
+    .then((updatedPost) => {
+      res.json({ beforeUpdatedPost: updatedPost, updated: req.body });
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 });
 
 module.exports = router;

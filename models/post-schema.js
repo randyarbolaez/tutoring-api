@@ -5,13 +5,16 @@ const postSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    user: Schema.Types.ObjectId
+    user: Schema.Types.ObjectId,
+    usersThatLikedThePost: [Schema.Types.ObjectId],
+    likes: { type: Number, default: 0 },
+    dislikes: { type: Number, default: 0 },
   },
   {
     timestamps: {
       createdAt: "created_at",
-      updatedAt: "updated_at"
-    }
+      updatedAt: "updated_at",
+    },
   }
 );
 
