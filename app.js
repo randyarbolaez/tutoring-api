@@ -22,12 +22,12 @@ mongoose.Promise = Promise;
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   .then(() => {
     console.log("Connected to Mongo!");
   })
-  .catch(err => {
+  .catch((err) => {
     console.error("Error connecting to mongo", err);
   });
 // DB Setup
@@ -43,7 +43,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
-    extended: false
+    extended: false,
   })
 );
 app.use(cookieParser());
@@ -52,7 +52,7 @@ app.use(
   session({
     secret: "our-passport-local-strategy-app",
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
   })
 );
 
@@ -79,12 +79,12 @@ passport.deserializeUser((id, cb) => {
 passport.use(
   new LocalStrategy(
     {
-      passReqToCallback: true
+      passReqToCallback: true,
     },
     (req, username, password, next) => {
       User.findOne(
         {
-          username
+          username,
         },
         (err, user) => {
           if (err) {
@@ -92,12 +92,12 @@ passport.use(
           }
           if (!user) {
             return next(null, false, {
-              message: "Incorrect username"
+              message: "Incorrect username",
             });
           }
           if (!bcrypt.compareSync(password, user.password)) {
             return next(null, false, {
-              message: "Incorrect password"
+              message: "Incorrect password",
             });
           }
 
@@ -116,6 +116,8 @@ const authRoutes = require("./routes/auth-routes");
 app.use("/", authRoutes);
 const postRoutes = require("./routes/post-routes");
 app.use("/post", postRoutes);
+const bookmarkRoutes = require("./routes/bookmark-routes");
+app.use("/bookmark", bookmarkRoutes);
 //Route
 
 app.listen(process.env.PORT || 8080, () => {
