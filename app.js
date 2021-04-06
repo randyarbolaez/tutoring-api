@@ -58,10 +58,6 @@ app.use(
 
 app.use(cors());
 
-// app.set("views", path.join(__dirname, "views"));
-// app.use(express.static(path.join(__dirname, "/public")));
-// app.use(favicon(path.join(__dirname, "public", "images", "favicon.ico")));
-
 // PASSPORT CONFIG
 passport.serializeUser((user, cb) => {
   cb(null, user._id);
